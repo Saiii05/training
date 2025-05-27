@@ -1,0 +1,121 @@
+# Object Detection Model - AI Intern Assignment
+
+This project implements an object detection model using a pre-trained CNN backbone (ResNet50) and a custom detection head, trained on the Pascal VOC 2012 dataset. This was developed as part of an AI Internship assignment, with significant portions of the boilerplate and component integration assisted by an AI coding assistant.
+
+## Project Structure
+
+```
+object_detector/
+├── data/                     # Data will be downloaded here (e.g., VOCdevkit)
+│   └── VOCdevkit/
+├── models_checkpoints/       # Trained model checkpoints will be saved here
+├── notebooks/
+│   └── demo.ipynb            # Jupyter notebook for live demo
+├── reports/
+│   ├── EXPERIENCE_REPORT.md  # Your personal experience report (template)
+│   └── (evaluation_metrics.txt) # Placeholder for saving evaluation output
+├── src/                      # Source code for the model and utilities
+│   ├── __init__.py
+│   ├── backbone.py           # CNN backbone (ResNet50)
+│   ├── dataset.py            # PascalVOCDataset and PASCAL_VOC_CLASSES
+│   ├── detection_head.py     # SimpleDetectionHead
+│   ├── loss.py               # DetectionLoss (classification + localization)
+│   ├── model.py              # ObjectDetectionModel (combines backbone, head, default boxes)
+│   ├── transforms.py         # Image transformations
+│   └── utils.py              # Utilities (IoU, NMS, box conversions)
+├── .gitignore                # Standard Python .gitignore
+├── evaluate.py             # Script for evaluating a trained model
+├── requirements.txt          # Python dependencies
+├── train.py                # Main training script
+└── README.md                 # This file
+```
+
+## Setup
+
+1.  **Clone the repository (if applicable).**
+
+2.  **Create and activate a Python virtual environment (recommended):**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+    *Note: `pycocotools` might require Visual C++ Build Tools on Windows or `cython` on Linux/macOS if installing from source via pip. If you encounter issues, try installing it via conda or searching for pre-compiled binaries.*
+
+## Usage
+
+### 1. Training the Model
+
+The training script `train.py` handles dataset downloading, model training, and checkpoint saving.
+
+-   **Dataset:** Pascal VOC 2012 will be automatically downloaded to `object_detector/data/VOCdevkit/` if not found (approx. 2GB).
+-   **Checkpoints:** Model checkpoints (including the best model based on validation loss, `checkpoint_best.pth`) will be saved in `object_detector/models_checkpoints/` by default.
+
+**To start training with default parameters:**
+```bash
+python train.py
+```
+
+**Common options:**
+-   `--data-path`: Specify dataset location (if not default).
+-   `--output-dir`: Specify checkpoint save location.
+-   `--num-epochs`: Set number of training epochs (default: 30).
+-   `--batch-size`: Set training batch size (default: 16, adjust based on GPU memory).
+-   `--learning-rate`: Set initial learning rate (default: 0.001).
+-   `--image-size`: Image size for training (default: 300).
+-   `--resume`: Path to a checkpoint to resume training.
+
+Example with custom parameters:
+```bash
+python train.py --num-epochs 50 --batch-size 8 --learning-rate 0.0005 --output-dir ./my_checkpoints
+```
+Training is computationally intensive and a CUDA-enabled GPU is highly recommended.
+
+### 2. Evaluating the Model
+
+The `evaluate.py` script calculates Mean Average Precision (mAP) for a trained model on the validation set.
+
+**To evaluate your best trained model:**
+```bash
+python evaluate.py --checkpoint-path ./models_checkpoints/checkpoint_best.pth
+```
+
+**To save evaluation metrics to a file:**
+```bash
+python evaluate.py --checkpoint-path ./models_checkpoints/checkpoint_best.pth > ./reports/evaluation_metrics.txt
+```
+Make sure the `--image-size` used during evaluation matches the one used for training the loaded checkpoint.
+
+### 3. Running the Demo Notebook
+
+The `notebooks/demo.ipynb` allows you to visualize detections on your own images.
+
+1.  **Ensure you have a trained model checkpoint** (e.g., `models_checkpoints/checkpoint_best.pth`). The path is configurable in the notebook.
+2.  **Create a directory `test_images/`** in the `object_detector/` root (i.e., `object_detector/test_images/`).
+3.  **Place your test images** (e.g., `.jpg`, `.png`) into the `object_detector/test_images/` directory.
+4.  **Start Jupyter Notebook:**
+    ```bash
+    jupyter notebook
+    ```
+5.  Open `notebooks/demo.ipynb` from the Jupyter interface.
+6.  Modify the `DEFAULT_TEST_IMAGE` variable in the configuration cell to point to your image file name.
+7.  Run the cells in the notebook.
+
+## Deliverables Checklist (from Assignment)
+
+1.  **Source code for your implementation:** Provided in `src/`, `train.py`, `evaluate.py`.
+2.  **Trained model weights:** Generated by `train.py` in `models_checkpoints/`. You need to run training to obtain these.
+3.  **Evaluation metrics (mAP, precision, recall):** Generated by `evaluate.py`.
+4.  **Demo showing your model detecting objects on test images:** Provided by `notebooks/demo.ipynb`.
+5.  **Experience report:** Fill in the template at `reports/EXPERIENCE_REPORT.md`.
+
+## AI Assistance
+
+This project was developed with the assistance of an AI coding partner. The AI helped in generating boilerplate code, structuring modules, implementing complex algorithms (like mAP calculation and default box generation), debugging, and creating utility scripts. The development process involved iterative prompting, reviewing AI-generated code, and integrating it into the larger project. Key areas of AI contribution include the initial setup of most Python files (`dataset.py`, `loss.py`, `model.py`, `train.py`, `evaluate.py`, `demo.ipynb`, etc.) and the core logic within them, which was then reviewed and refined.
+
+---
+*This README was also generated with AI assistance.*
