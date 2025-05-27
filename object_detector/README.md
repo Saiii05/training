@@ -118,4 +118,4 @@ The `notebooks/demo.ipynb` allows you to visualize detections on your own images
 This project was developed with the assistance of an AI coding partner. The AI helped in generating boilerplate code, structuring modules, implementing complex algorithms (like mAP calculation and default box generation), debugging, and creating utility scripts. The development process involved iterative prompting, reviewing AI-generated code, and integrating it into the larger project. Key areas of AI contribution include the initial setup of most Python files (`dataset.py`, `loss.py`, `model.py`, `train.py`, `evaluate.py`, `demo.ipynb`, etc.) and the core logic within them, which was then reviewed and refined.
 
 ---
-*This README was also generated with AI assistance.*
+
